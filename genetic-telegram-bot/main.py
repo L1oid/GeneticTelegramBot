@@ -1,6 +1,7 @@
 import json
 import logging
 import requests
+import emoji
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, CallbackContext
 
@@ -173,7 +174,14 @@ async def button(update: Update, context: CallbackContext) -> None:
             await get_questionnaires(query, context)
 
 
+def contains_emoji(text: str) -> bool:
+    return any(char in emoji.EMOJI_DATA for char in text)
+
+
 async def search(update: Update, context: CallbackContext) -> None:
+    if contains_emoji(update.message.text):
+        return
+
     current_question_index = context.user_data.get('current_question', 0)
     questions = context.user_data.get('questions', [])
 
@@ -196,7 +204,13 @@ def main() -> None:
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(button))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, search))
+    app.add_handler(MessageHandler(
+        filters.TEXT &
+        ~filters.COMMAND &
+        ~filters.PHOTO &
+        ~filters.VIDEO &
+        ~filters.ANIMATION,
+        search))
 
     app.run_polling()
 
