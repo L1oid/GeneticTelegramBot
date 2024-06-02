@@ -1,11 +1,9 @@
-import json
-import logging
 import requests
 import emoji
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, CallbackContext
 
-TOKEN = '7295788823:AAGcA9-HkOe-CAq8LhBNpxAl9uJwuHkVP6k'
+TOKEN = 'TOKEN_BOT'
 API_URL = 'http://genetic.kemsu.ru/api/questionnaires'
 QUESTION_URL = 'http://genetic.kemsu.ru/api/questionnaires/questions'
 ANSWERS_URL = 'http://genetic.kemsu.ru/api/questionnaires/questions/answers-to-choose'
@@ -34,7 +32,6 @@ async def get_questionnaires(update: Update, context: CallbackContext, title: st
             nav_buttons = []
             if page > 1:
                 nav_buttons.append(InlineKeyboardButton('⬅️', callback_data='prev_page'))
-            nav_buttons.append(InlineKeyboardButton(f'📃 {page}', callback_data='ignore'))
             if len(questionnaires) == PAGE_SIZE:
                 nav_buttons.append(InlineKeyboardButton('➡️', callback_data='next_page'))
             if nav_buttons:
@@ -142,7 +139,7 @@ async def submit_answers(update: Update, context: CallbackContext) -> None:
     solve = {'questionnaireId': questionnaire_id, 'answerSet': answers}
     response = requests.post(SUBMISSION_URL, json=solve)
     if response.status_code == 200:
-        await update.message.reply_text("Результат прохождения: " + response.text)
+        await update.message.reply_text("Результат прохождения: \n\n" + response.text)
         await get_questionnaires(update, context)
     else:
         await update.message.reply_text('Ошибка при отправке анкеты.')
