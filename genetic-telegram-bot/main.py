@@ -3,7 +3,7 @@ import emoji
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, CallbackContext
 
-TOKEN = 'TOKEN_BOT'
+TOKEN = 'USER_TOKEN'
 API_URL = 'http://genetic.kemsu.ru/api/questionnaires'
 QUESTION_URL = 'http://genetic.kemsu.ru/api/questionnaires/questions'
 ANSWERS_URL = 'http://genetic.kemsu.ru/api/questionnaires/questions/answers-to-choose'
