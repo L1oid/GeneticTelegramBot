@@ -44,7 +44,7 @@ async def get_questionnaires(update: Update, context: CallbackContext, title: st
                 await get_questionnaires(update, context)
             else:
                 await update.message.reply_text('Анкеты не найдены.')
-    elif response.status_code == 404:
+    elif response.status_code == 204:
         if title and not retry:
             await update.message.reply_text('Анкеты с таким названием не найдены. Вывожу стандартный список.')
             await get_questionnaires(update, context)
