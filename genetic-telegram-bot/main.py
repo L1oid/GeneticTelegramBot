@@ -12,7 +12,7 @@ PAGE_SIZE = 6
 
 
 async def start(update: Update, context: CallbackContext) -> None:
-    await update.message.reply_text('Здравствуйте! Здесь вы можете пройти анкетирование связанное с генетическими вопросами.')
+    await update.message.reply_text('Здравствуйте! Здесь вы можете пройти опросы, связанные с генетической тематикой.')
     context.user_data['page'] = 1
     await get_questionnaires(update, context)
 
@@ -40,18 +40,18 @@ async def get_questionnaires(update: Update, context: CallbackContext, title: st
             await update.message.reply_text('Выберите анкету:', reply_markup=reply_markup)
         else:
             if title and not retry:
-                await update.message.reply_text('Анкеты с таким названием не найдены. Вывожу стандартный список.')
+                await update.message.reply_text('Опросы с таким названием не найдены. Вывожу стандартный список.')
                 await get_questionnaires(update, context)
             else:
-                await update.message.reply_text('Анкеты не найдены.')
+                await update.message.reply_text('Опросы не найдены.')
     elif response.status_code == 204:
         if title and not retry:
-            await update.message.reply_text('Анкеты с таким названием не найдены. Вывожу стандартный список.')
+            await update.message.reply_text('Опросы с таким названием не найдены. Вывожу стандартный список.')
             await get_questionnaires(update, context)
         else:
-            await update.message.reply_text('Анкеты не найдены.')
+            await update.message.reply_text('Опросы не найдены.')
     else:
-        await update.message.reply_text('Ошибка получения анкет.')
+        await update.message.reply_text('Ошибка получения опросов.')
 
 
 async def get_questions(update: Update, context: CallbackContext, questionnaire_id: int) -> None:
@@ -65,7 +65,7 @@ async def get_questions(update: Update, context: CallbackContext, questionnaire_
         context.user_data['questionnaire_id'] = questionnaire_id
         await ask_question(update, context)
     else:
-        await update.message.reply_text('Ошибка получения вопросов анкеты.')
+        await update.message.reply_text('Ошибка получения вопросов опроса.')
 
 
 async def ask_question(update: Update, context: CallbackContext) -> None:
@@ -142,7 +142,7 @@ async def submit_answers(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text("Результат прохождения: \n\n" + response.text)
         await get_questionnaires(update, context)
     else:
-        await update.message.reply_text('Ошибка при отправке анкеты.')
+        await update.message.reply_text('Ошибка при отправке опроса.')
         await get_questionnaires(update, context)
 
 
